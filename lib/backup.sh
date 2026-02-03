@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-source "$HOME/.config/terraria-manager/terraria-manager.cfg"
-source "$HOME/.config/terraria-manager/terraria-manager.env"
-source "$TMANAGER_LIB/common.sh"
-
 ## Backup:
 ## Written By: Jachin Minyard
 ## Used to backup things like the Server, World Files, etc...
@@ -15,32 +11,40 @@ source "$TMANAGER_LIB/common.sh"
 ## Depending on the above flag this script will back up those items.
 
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/setup.sh"
+source "$SCRIPT_DIR/common.sh"
+source "$TMANAGER_CONFIG/terraria-manager.cfg"
+
+
 BACKUP_SERVER=false
 BACKUP_WORLD=""
 BACKUP_CONFIG=""
 
-
 function print_usage {
-    echo -e "${BOLD}TManager backup${RESET} — Backup Terraria resources"
+    help_title "TManager backup" "Backup Terraria resources"
+
+    help_section "Usage"
+    echo -e "  ${CMD_COLOR}TManager backup${RESET} [options]"
     echo
-    echo -e "${BOLD}Usage:${RESET}"
-    echo -e "  ${CYAN}TManager backup${RESET} [options]"
+
+    help_section "Options"
+    help_option "-s, --server" ""        "Backup the Terraria server binaries"
+    help_option "-w, --world"  "<world>" "Backup a specific world"
+    help_option "-c, --config" "<file>"  "Backup using a config file"
+    help_option "-h, --help"   ""        "Show this help message"
     echo
-    echo -e "${BOLD}Options:${RESET}"
-    echo -e "  ${GREEN}-s${RESET}, ${GREEN}--server${RESET}               Backup the Terraria server binaries"
-    echo -e "  ${GREEN}-w${RESET}, ${GREEN}--world${RESET} <world>        Backup a specific world"
-    echo -e "  ${GREEN}-c${RESET}, ${GREEN}--config${RESET} <file>        Backup using a config file"
-    echo -e "  ${GREEN}-h${RESET}, ${GREEN}--help${RESET}                Show this help message"
+
+    help_section "Notes"
+    help_note "At least one backup option is required"
+    help_note "Options may be combined"
     echo
-    echo -e "${BOLD}Notes:${RESET}"
-    echo -e "  • At least one backup option is required"
-    echo -e "  • Options may be combined"
-    echo
-    echo -e "${BOLD}Examples:${RESET}"
-    echo -e "  ${CYAN}TManager backup${RESET} --server"
-    echo -e "  ${CYAN}TManager backup${RESET} --world MyWorld"
-    echo -e "  ${CYAN}TManager backup${RESET} --config server.cfg"
-    echo -e "  ${CYAN}TManager backup${RESET} -s -w MyWorld"
+
+    help_section "Examples"
+    echo -e "  ${CMD_COLOR}TManager backup${RESET} --server"
+    echo -e "  ${CMD_COLOR}TManager backup${RESET} --world MyWorld"
+    echo -e "  ${CMD_COLOR}TManager backup${RESET} --config server.cfg"
+    echo -e "  ${CMD_COLOR}TManager backup${RESET} -s -w MyWorld"
 }
 
 
@@ -114,16 +118,20 @@ function parse_args {
 
 function run_command {
     if [[ "$BACKUP_SERVER" == true ]]; then
-	echo -e "${GREEN}[TManager Backup]:${RESET} Backing up server..."
+        echo -e "${GREEN}[TManager Backup]:${RESET} Backing up server..."
+        "$TMANAGER_LIB/backup-server.sh"
     fi
+
     if [[ -n "$BACKUP_WORLD" ]]; then
-	echo -e "${GREEN}[TManager Backup]:${RESET} Not Yet Implemented"
+        echo -e "${GREEN}[TManager Backup]:${RESET} Backing up world..."
+        "$TMANAGER_LIB/backup-world.sh" "$BACKUP_WORLD"
     fi
+
     if [[ -n "$BACKUP_CONFIG" ]]; then
-	echo -e "${GREEN}[TManager Backup]:${RESET} Not Yet Implemented"
+        echo -e "${YELLOW}[TManager Backup]:${RESET} Config backup not yet implemented"
     fi
-    
 }
+
 
 parse_args "$@"
 run_command

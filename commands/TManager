@@ -1,75 +1,115 @@
 #!/usr/bin/env bash
 
-## TManager: Manager Tool for Terraria Servers.
+## TManager: Terraria Server Manager
 ## Written By: Jachin Minyard
 
 source "$HOME/.config/terraria-manager/terraria-manager.cfg"
 source "$HOME/.config/terraria-manager/terraria-manager.env"
 source "$TMANAGER_LIB/common.sh"
 
-
+###############################################################################
+# Help
+###############################################################################
 print_usage() {
-    echo -e "${BOLD}TManager${RESET} — Terraria Server Manager"
+    help_title "TManager" "Terraria Server Manager"
+
+    help_section "Usage"
+    echo -e "  ${CMD_COLOR}TManager${RESET} <command> [options]"
     echo
 
-    echo -e "${BOLD}Usage:${RESET}"
-    echo -e "  ${CYAN}TManager${RESET} <command> [options]"
+    help_section "Commands"
+    help_option "help"      "" "Show help (optionally for a command)"
+    help_option "configure" "" "Modify a server configuration"
+    help_option "backup"    "" "Backup server, worlds, or configs"
+    echo
+    help_section "Server Management"
+    help_option "install"   "" "Install the Terraria server from the official source"
+    help_option "uninstall" "" "Uninstall the Terraria server"
+    help_option "update"    "" "Update the server to the latest version"
+    echo
+    help_section "Tool Management"
+    help_option "remove"    "" "Remove the TManager toolchain and configs"
+    help_option "upgrade" "" "updates the tools to the latest versions.(Not Implemented)"
+    echo
+    help_section "Session Management"
+    help_option "launch"    "" "Start a Terraria server session"
+    help_option "stop"      "" "Stop a running server session(Not Implemented)"
+    help_option "view"      "" "View a running server session (tmux) (Not Implemeneted)"
+    help_option "new" "" "launches the server with no params or session."
     echo
 
-    echo -e "${BOLD}Commands:${RESET}"
-    echo -e "  ${GREEN}launch${RESET}        Launch a Terraria server"
-    echo -e "  ${GREEN}stop${RESET}          Stop a running server"
-    echo -e "  ${GREEN}view${RESET}          View server status or logs"
-    echo -e "  ${GREEN}backup${RESET}        Backup data including [server, worlds, configs]"
-    echo -e "  ${GREEN}update${RESET}        Update server binaries"
-    echo -e "  ${GREEN}uninstall${RESET}     Remove TManager and all related files"
-    echo -e "  ${GREEN}help${RESET}          Show this help message"
+    help_section "Global Options"
+    help_option "-h, --help" "" "Show this help message"
     echo
 
-    echo -e "${BOLD}Global options:${RESET}"
-    echo -e "  ${YELLOW}-h${RESET}, ${YELLOW}--help${RESET}    Show help information"
+    help_section "Examples"
+    echo -e "  ${CMD_COLOR}TManager install${RESET}"
+    echo -e "  ${CMD_COLOR}TManager launch --config myserver.cfg${RESET}"
+    echo -e "  ${CMD_COLOR}TManager backup --world MyWorld${RESET}"
+    echo -e "  ${CMD_COLOR}TManager help launch${RESET}"
     echo
-
-    echo -e "${BOLD}Examples:${RESET}"
-    echo -e "  ${CYAN}TManager${RESET} launch"
-    echo -e "  ${CYAN}TManager${RESET} backup"
-    echo -e "  ${CYAN}TManager${RESET} uninstall"
-    echo
-
-    echo -e "Run '${CYAN}TManager help <command>${RESET}' for command-specific help."
 }
 
-
-
+###############################################################################
+# Argument handling
+###############################################################################
 cmd="${1:-help}"
 shift || true
 
 case "$cmd" in
+    help|-h|--help)
+        if [[ -n "$1" ]]; then
+            # Forward help to subcommand if it exists
+            if [[ -x "$TMANAGER_LIB/$1.sh" ]]; then
+                exec "$TMANAGER_LIB/$1.sh" --help
+            else
+                echo -e "${RED}[TManager]:${RESET} Unknown command '$1'"
+                exit 1
+            fi
+        else
+            print_usage
+        fi
+        ;;
+
+    install)
+        exec "$TMANAGER_LIB/install.sh" "$@"
+        ;;
+    uninstall)
+        exec "$TMANAGER_LIB/uninstall.sh" "$@"
+        ;;    
+    update)
+        exec "$TMANAGER_LIB/update.sh" "$@"
+        ;;
+   
+    remove)
+        exec "$TMANAGER_LIB/remove.sh" "$@"
+        ;;
+    upgrade)
+	exec "$TMANAGER_LIB/upgrade.sh" "$@"
+	;;
+
     launch)
-	exec "$TMANAGER_LIB/launch.sh" "$@"
-	;;
+        exec "$TMANAGER_LIB/launch.sh" "$@"
+        ;;
     stop)
-	echo "[TManager]: 'Stop' is not currently supported"
-	;;
+        exec "$TMANAGER_LIB/stop.sh" "$@"
+        ;;
     view)
-	echo "[TManager]: 'View' is not currently supported"
+        exec "$TMANAGER_LIB/view.sh" "$@"
+        ;;
+    new)
+	exec "$TMANAGER_LIB/new.sh" "$@"
 	;;
     backup)
-	exec "$TMANAGER_LIB/backup.sh" "$@"
-	;;
-    update)
-	echo "[TManager]: 'Update' is not currently supported"
-	;;
-    uninstall)
-	echo -e "${BOLD}[TManager]:${RESET} uninstaller launching..."
-	exec "$TMANAGER_LIB/uninstall.sh" "$@"
-	;;
-    help|-h|--help)
-	print_usage
-	;;
+        exec "$TMANAGER_LIB/backup.sh" "$@"
+        ;;
+    configure)
+        exec "$TMANAGER_LIB/configure.sh" "$@"
+        ;;
+
     *)
-	echo "[TManager]: Unknown command '$cmd'"
-	echo "Run 'TManager help' for aviable commands."
-	exit 1
-	;;
+        echo -e "${RED}[TManager]:${RESET} Unknown command '$cmd'"
+        echo "Run '${CMD_COLOR}TManager help${RESET}' to see available commands."
+        exit 1
+        ;;
 esac

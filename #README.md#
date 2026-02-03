@@ -1,4 +1,4 @@
-# Terraria Manager
+ # Terraria Manager
 This is a hobby project and something I started to help streamline when I needed to work on any of the servers. It is a collection of tools to help manage and automate running multiple terraria server instances on a single machine. There are many tools this manager uses to make like easier a list of these tools are provided below:
 
 - install: install the Terraria server from the official site.
