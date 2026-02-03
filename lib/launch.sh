@@ -40,56 +40,56 @@ DISABLE_ANNOUNCE=false
 #region Functions
 ## Prints out a simple help menu for this command.
 function print_usage {
-    echo -e "${BOLD}TManager launch${RESET} — Launch a Terraria server instance"
+    help_title "TManager launch" "Launch a Terraria server instance"
+    help_section "Usage"
+    echo -e "  ${CMD_COLOR}TManager launch${RESET} ${OPT_COLOR}--session${RESET} <name> [TerrariaServer options]"
     echo
-    echo -e "${BOLD}Usage:${RESET}"
-    echo -e "  ${CYAN}TManager launch${RESET} ${GREEN}--session${RESET} <name> [TerrariaServer options]"
+    help_section "Required"
+    help_option "-s, --session" "<name>" "Name of the tmux session to run the server in"
     echo
-    echo -e "${BOLD}Required:${RESET}"
-    echo -e "  ${GREEN}-s${RESET}, ${GREEN}--session${RESET} <name>       Name of the tmux session to run the server in"
+    help_section "Common Options"
+    help_option "-c, --config" "<file>" "Use a Terraria server config file"
+    help_option "--port" "<number>" "Server port"
+    help_option "--world" "<path>" "Path to world file"
+    help_option "--players, --maxplayers" "<number>" "Maximum number of players"
+    help_option "--password" "<password>" "Server password"
+    help_option "--motd" "<text>" "Message of the day"
     echo
-    echo -e "${BOLD}Common Options:${RESET}"
-    echo -e "  ${GREEN}-c${RESET}, ${GREEN}--config${RESET} <file>        Use a Terraria server config file"
-    echo -e "  ${GREEN}--port${RESET} <number>               Server port"
-    echo -e "  ${GREEN}--world${RESET} <path>                Path to world file"
-    echo -e "  ${GREEN}--players${RESET} <number>            Max players (alias: --maxplayers)"
-    echo -e "  ${GREEN}--password${RESET} <password>         Server password"
-    echo -e "  ${GREEN}--motd${RESET} <text>                 Message of the day"
+    help_section "World Creation"
+    help_option "--autocreate" "<1|2|3>" "Create world if missing (1=small, 2=medium, 3=large)"
+    help_option "--worldname" "<name>" "World name when using --autocreate"
+    help_option "--seed" "<seed>" "World seed when using --autocreate"
     echo
-    echo -e "${BOLD}World Creation:${RESET}"
-    echo -e "  ${GREEN}--autocreate${RESET} <1|2|3>           Create world if missing (1=small, 2=medium, 3=large)"
-    echo -e "  ${GREEN}--worldname${RESET} <name>             World name when using --autocreate"
-    echo -e "  ${GREEN}--seed${RESET} <seed>                  World seed when using --autocreate"
+    help_section "Networking & Security"
+    help_option "--ip" "<address>" "IP address to bind"
+    help_option "--secure" "" "Enable additional cheat protection"
+    help_option "--noupnp" "" "Disable UPnP"
+    help_option "--banlist" "<file>" "Path to banlist file"
     echo
-    echo -e "${BOLD}Networking & Security:${RESET}"
-    echo -e "  ${GREEN}--ip${RESET} <address>                IP address to bind"
-    echo -e "  ${GREEN}--secure${RESET}                      Enable additional cheat protection"
-    echo -e "  ${GREEN}--noupnp${RESET}                      Disable UPnP"
-    echo -e "  ${GREEN}--banlist${RESET} <file>              Path to banlist file"
+    help_section "Steam Integration"
+    help_option "--steam" "" "Enable Steam support"
+    help_option "--lobby" "<friends|private>" "Steam lobby visibility"
     echo
-    echo -e "${BOLD}Steam Integration:${RESET}"
-    echo -e "  ${GREEN}--steam${RESET}                       Enable Steam support"
-    echo -e "  ${GREEN}--lobby${RESET} <friends|private>     Steam lobby visibility"
+    help_section "Advanced"
+    help_option "--forcepriority" "<priority>" "Set process priority"
+    help_option "--disableannouncementbox" "" "Disable announcement box messages"
+    help_option "--announcementboxrange" "<num>" "Announcement range (-1 = serverwide)"
     echo
-    echo -e "${BOLD}Advanced:${RESET}"
-    echo -e "  ${GREEN}--forcepriority${RESET} <priority>     Set process priority"
-    echo -e "  ${GREEN}--disableannouncementbox${RESET}       Disable announcement box messages"
-    echo -e "  ${GREEN}--announcementboxrange${RESET} <num>   Announcement range in pixels (-1 = serverwide)"
+    help_section "Other"
+    help_option "-h, --help" "" "Show this help message"
     echo
-    echo -e "${BOLD}Other:${RESET}"
-    echo -e "  ${GREEN}-h${RESET}, ${GREEN}--help${RESET}                Show this help message"
+    help_section "Notes"
+    help_note "All options are passed directly to TerrariaServer"
+    help_note "Command-line options override config values"
+    help_note "Servers are launched inside tmux"
+    help_note "The server runs via mono (Raspberry Pi compatible)"
     echo
-    echo -e "${BOLD}Notes:${RESET}"
-    echo -e "  • All options are passed directly to ${CYAN}TerrariaServer${RESET}"
-    echo -e "  • If ${CYAN}--config${RESET} is provided, it overrides all other options"
-    echo -e "  • Servers are launched inside a ${CYAN}tmux${RESET} session"
-    echo -e "  • The server runs via ${CYAN}mono${RESET} (Raspberry Pi compatible)"
-    echo
-    echo -e "${BOLD}Examples:${RESET}"
-    echo -e "  ${CYAN}TManager launch${RESET} -s terraria --config vanilla.cfg"
-    echo -e "  ${CYAN}TManager launch${RESET} -s terraria --world worlds/MyWorld.wld --port 7777"
-    echo -e "  ${CYAN}TManager launch${RESET} -s terraria --autocreate 2 --worldname MyWorld --seed abc123"
+    help_section "Examples"
+    echo -e "  ${CMD_COLOR}TManager launch ${RESET} ${YELLOW}-s${RESET} terraria ${YELLOW}--config${RESET} vanilla.cfg"
+    echo -e "  ${CMD_COLOR}TManager launch ${RESET} ${YELLOW}-s${RESET} terraria ${YELLOW}--world${RESET} worlds/MyWorld.wld ${YELLOW}--port${RESET} 7777"
+    echo -e "  ${CMD_COLOR}TManager launch ${RESET} ${YELLOW}-s${RESET} terraria ${YELLOW}--autocreate${RESET} 2 ${YELLOW}--worldname${RESET} MyWorld ${YELLOW}--seed${RESET} abc123"
 }
+
 
 ## Parse out the command line arguments.
 function parse_args {
@@ -253,7 +253,7 @@ function launch {
     echo -e "${CYAN}[Command]:${RESET} mono \"$TSERVER\" ${FINAL_ARGS[*]}"
     
     tmux new-session -d -s "$SESSION" \
-         "mono \"$TSERVER\" ${FINAL_ARGS[*]}"
+         "mono --server --gc=sgen -O=all ./\"$TERRARIA_SERVER_DIR/$TERRARIA_SERVER\" ${FINAL_ARGS[*]}"
 }
 
 

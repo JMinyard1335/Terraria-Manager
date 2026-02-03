@@ -61,7 +61,7 @@ function parse_args {
                 ;;
         esac
     done
-}
+8}
 
 ## Prompt the user to make sure they wanted to uninstall the server.
 function start_uninstall {
