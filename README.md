@@ -1,5 +1,6 @@
 # Terraria Manager
-This is a group of commands and configs that I created to help manage running multiple Terraria servers on my raspi. 
+This is a hoby project and something I started to help streamline when I needed to work on any of the servers.  It is a collection of tools to help manage 
+and automate running multiple terraria server instances on a single machine. 
 
 ## Manager Config
 The manager needs to know a few different things about how your Terraria server is set up. To keep from forcing everyone to use the same layout that I do, 
