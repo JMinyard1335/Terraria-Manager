@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+source "$SCRIPT_DIR/configs/terraria-manager.cfg"
+source "$SCRIPT_DIR/configs/terraria-manager.env"
+source "$SCRIPT_DIR/lib/common.sh"
+
+
+function start_install {
+    echo "Welcome to the Terraria Manager installer."
+    echo "This project is not affiliated with, sponsored by, or worked on by Re-Logic."
+    echo "Its purpose is to streamline the management of multiple dedicated Terraria servers."
+    echo
+    if ! y_n_prompt "Would you like to continue the install? (y/n): "; then
+	echo "Installation cancelled."
+	exit 0
+    fi
+}
+
+
+function install_config {
+    # copy the configs to the config destination
+    echo "[TManager Install]: Setting up the configuration files..."
+    mkdir -p "$TMANAGER_CONFIG"
+    shopt -s nullglob
+    cp "$SCRIPT_DIR/configs/"* "$TMANAGER_CONFIG"
+    shopt -u nullglob
+}
+
+
+function install_lib {
+    # copy the library to the library destination 
+    echo "[TManager Install]: Setting up the library files..."
+    mkdir -p "$TMANAGER_LIB"
+    shopt -s nullglob
+    cp "$SCRIPT_DIR/lib/"* "$TMANAGER_LIB"
+    shopt -u nullglob
+}
+
+
+function install_cmds {
+    # copy the library to the library destination 
+    echo "[TManager Install]: Setting up the commands..."
+    mkdir -p "$TMANAGER_CMDS"
+    shopt -s nullglob
+    cp "$SCRIPT_DIR/commands/"* "$TMANAGER_CMDS"
+    shopt -u nullglob
+    chmod +x "$TMANAGER_CMDS"/*
+}
+
+
+function set_up_path {
+    SHELL_NAME="$(basename "$SHELL")"
+
+    case "$SHELL_NAME" in
+        bash)
+            add_to_path "$HOME/.bashrc" "$TMANAGER_CMDS"
+            ;;
+        zsh)
+            add_to_path "$HOME/.zshrc" "$TMANAGER_CMDS"
+            ;;
+        *)
+            echo "[TManager Install]: Unsupported shell ($SHELL_NAME)."
+            echo "Please add $TMANAGER_CMDS to your PATH manually."
+            ;;
+    esac
+}
+
+
+function install {
+    start_install
+    install_config
+    install_lib
+    install_cmds
+    set_up_path
+
+    echo
+    echo "[TManager Install]: Installation complete."
+    echo "Restart your shell or run:"
+    echo "  source ~/.bashrc"
+}
+
+
+install

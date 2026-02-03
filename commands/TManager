@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+## TManager: Manager Tool for Terraria Servers.
+## Written By: Jachin Minyard
+
+source "$HOME/.config/terraria-manager/terraria-manager.cfg"
+source "$HOME/.config/terraria-manager/terraria-manager.env"
+source "$TMANAGER_LIB/common.sh"
+
+
+print_usage() {
+    echo -e "${BOLD}TManager${RESET} — Terraria Server Manager"
+    echo
+
+    echo -e "${BOLD}Usage:${RESET}"
+    echo -e "  ${CYAN}TManager${RESET} <command> [options]"
+    echo
+
+    echo -e "${BOLD}Commands:${RESET}"
+    echo -e "  ${GREEN}launch${RESET}        Launch a Terraria server"
+    echo -e "  ${GREEN}stop${RESET}          Stop a running server"
+    echo -e "  ${GREEN}view${RESET}          View server status or logs"
+    echo -e "  ${GREEN}backup${RESET}        Backup data including [server, worlds, configs]"
+    echo -e "  ${GREEN}update${RESET}        Update server binaries"
+    echo -e "  ${GREEN}uninstall${RESET}     Remove TManager and all related files"
+    echo -e "  ${GREEN}help${RESET}          Show this help message"
+    echo
+
+    echo -e "${BOLD}Global options:${RESET}"
+    echo -e "  ${YELLOW}-h${RESET}, ${YELLOW}--help${RESET}    Show help information"
+    echo
+
+    echo -e "${BOLD}Examples:${RESET}"
+    echo -e "  ${CYAN}TManager${RESET} launch"
+    echo -e "  ${CYAN}TManager${RESET} backup"
+    echo -e "  ${CYAN}TManager${RESET} uninstall"
+    echo
+
+    echo -e "Run '${CYAN}TManager help <command>${RESET}' for command-specific help."
+}
+
+
+
+cmd="${1:-help}"
+shift || true
+
+case "$cmd" in
+    launch)
+	echo "[TManager]: 'Launch' is not currently supported"
+	;;
+    stop)
+	echo "[TManager]: 'Stop' is not currently supported"
+	;;
+    view)
+	echo "[TManager]: 'View' is not currently supported"
+	;;
+    backup)
+	exec "$TMANAGER_LIB/backup.sh" "$@"
+	echo "[TManager]: 'Backup' is not currently supported"
+	;;
+    update)
+	echo "[TManager]: 'Update' is not currently supported"
+	;;
+    uninstall)
+	echo -e "${BOLD}[TManager]:${RESET} uninstaller launching..."
+	exec "$TMANAGER_LIB/uninstall.sh" "$@"
+	;;
+    help|-h|--help)
+	print_usage
+	;;
+    *)
+	echo "[TManager]: Unknown command '$cmd'"
+	echo "Run 'TManager help' for aviable commands."
+	exit 1
+	;;
+esac
