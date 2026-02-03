@@ -40,6 +40,7 @@ print_usage() {
 
     help_section "Global Options"
     help_option "-h, --help" "" "Show this help message"
+    help_option "-d" "" "for no dub"
     echo
 
     help_section "Examples"
