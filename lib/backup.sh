@@ -23,23 +23,19 @@ BACKUP_CONFIG=""
 function print_usage {
     echo -e "${BOLD}TManager backup${RESET} — Backup Terraria resources"
     echo
-
     echo -e "${BOLD}Usage:${RESET}"
     echo -e "  ${CYAN}TManager backup${RESET} [options]"
     echo
-
     echo -e "${BOLD}Options:${RESET}"
     echo -e "  ${GREEN}-s${RESET}, ${GREEN}--server${RESET}               Backup the Terraria server binaries"
     echo -e "  ${GREEN}-w${RESET}, ${GREEN}--world${RESET} <world>        Backup a specific world"
     echo -e "  ${GREEN}-c${RESET}, ${GREEN}--config${RESET} <file>        Backup using a config file"
     echo -e "  ${GREEN}-h${RESET}, ${GREEN}--help${RESET}                Show this help message"
     echo
-
     echo -e "${BOLD}Notes:${RESET}"
     echo -e "  • At least one backup option is required"
     echo -e "  • Options may be combined"
     echo
-
     echo -e "${BOLD}Examples:${RESET}"
     echo -e "  ${CYAN}TManager backup${RESET} --server"
     echo -e "  ${CYAN}TManager backup${RESET} --world MyWorld"
@@ -48,14 +44,24 @@ function print_usage {
 }
 
 
-
 function parse_args {
     local PARSED
 
+    # handle no args
     [[ $# -eq 0 ]] && {
 	print_usage
 	exit 0
     }
+
+    # handle help arg
+    for arg in "$@"; do
+	case "$arg" in
+            -h|--help)
+		print_usage
+		exit 0
+		;;
+	esac
+    done
     
     PARSED=$(getopt -o sw:c:h \
         --long server,world:,config:,help \
@@ -68,7 +74,7 @@ function parse_args {
     fi
 
     eval set -- "$PARSED"
-
+    
     while true; do
         case "$1" in
             -s|--server)
@@ -82,10 +88,6 @@ function parse_args {
             -c|--config)
                 BACKUP_CONFIG="$2"
                 shift 2
-                ;;
-            -h|--help)
-                print_usage
-                exit 0
                 ;;
             --)
                 shift

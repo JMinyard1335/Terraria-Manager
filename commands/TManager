@@ -46,7 +46,7 @@ shift || true
 
 case "$cmd" in
     launch)
-	echo "[TManager]: 'Launch' is not currently supported"
+	exec "$TMANAGER_LIB/launch.sh" "$@"
 	;;
     stop)
 	echo "[TManager]: 'Stop' is not currently supported"
@@ -56,7 +56,6 @@ case "$cmd" in
 	;;
     backup)
 	exec "$TMANAGER_LIB/backup.sh" "$@"
-	echo "[TManager]: 'Backup' is not currently supported"
 	;;
     update)
 	echo "[TManager]: 'Update' is not currently supported"
