@@ -9,10 +9,12 @@
 ## Or to do a full update run TManager update
 ## Can remove probalmatic files for raspi during install.
 
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/setup.sh"
-source "$SCRIPT_DIR/common.sh"
+source "$SCRIPT_DIR/utils/setup.sh"
+source "$SCRIPT_DIR/utils/common.sh"
 source "$TMANAGER_CONFIG/terraria-manager.cfg"
+
 
 LATEST="1453" # Latest version of the server.
 CUSTOM_VERSION=""

@@ -8,10 +8,12 @@
 ## 2. Installing the latest server build
 ## 3. Applying Pi-specific fixes if configured
 
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/setup.sh"
-source "$SCRIPT_DIR/common.sh"
+source "$SCRIPT_DIR/utils/setup.sh"
+source "$SCRIPT_DIR/utils/common.sh"
 source "$TMANAGER_CONFIG/terraria-manager.cfg"
+
 
 function print_usage {
     help_title "TManager update" "Update the Terraria dedicated server"

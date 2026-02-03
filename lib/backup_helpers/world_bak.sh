@@ -7,8 +7,8 @@
 ## Enforces a per-world backup limit and removes oldest backups.
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/setup.sh"
-source "$SCRIPT_DIR/common.sh"
+source "$SCRIPT_DIR/../utils/setup.sh"
+source "$SCRIPT_DIR/../utils/common.sh"
 source "$TMANAGER_CONFIG/terraria-manager.cfg"
 
 WORLD_NAME="$1"

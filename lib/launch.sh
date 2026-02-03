@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-source "$HOME/.config/terraria-manager/terraria-manager.cfg"
-source "$HOME/.config/terraria-manager/terraria-manager.env"
-source "$TMANAGER_LIB/common.sh"
-
 ## Launch:
 ## Written By Jachin Minyard
 ## Used to launch instances of Terraria Server.
@@ -11,7 +7,14 @@ source "$TMANAGER_LIB/common.sh"
 ## This ones pretty simple it is just a wrapper around tmux mono and Terraria Server
 ## simply put its arguments and options are the same as TerrariaServer and will be passed
 ## accordling. A Session name must be provided so that tmux can give each session running a
-## a server a name for finding it quickly later.
+## a server a name for finding it quickly later. The given session name has ts appended to it
+## however when asked for the session name only give the name with out '-ts'
+
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/utils/setup.sh"
+source "$SCRIPT_DIR/utils/common.sh"
+source "$TMANAGER_CONFIG/terraria-manager.cfg"
 
 
 #region Variables
@@ -33,6 +36,8 @@ SECURE=false
 NOUPNP=false
 STEAM=false
 DISABLE_ANNOUNCE=false
+
+SESSION_TS=""
 
 #endregion Variables
 
@@ -223,11 +228,12 @@ function parse_args {
 
 ## Used to make sure that the session is not allready in use in tmux.
 function validate_session {
-    if tmux has-session -t "$SESSION" 2>/dev/null; then
-        echo -e "${RED}[TManager Launch]:${RESET} Session '$SESSION' already exists"
+    if tmux has-session -t "$SESSION_TS" 2>/dev/null; then
+        echo -e "${RED}[TManager Launch]:${RESET} Session '$SESSION_TS' already exists"
         exit 1
     fi
 }
+
 
 
 function build_server_args {
@@ -249,11 +255,11 @@ function launch {
     validate_session
     build_server_args
 
-    echo -e "${GREEN}[TManager Launch]:${RESET} Starting server in tmux session '${SESSION}'"
-    echo -e "${CYAN}[Command]:${RESET} mono \"$TSERVER\" ${FINAL_ARGS[*]}"
+    echo -e "${GREEN}[TManager Launch]:${RESET} Starting server in tmux session '${SESSION_TS}'"
+    echo -e "${CYAN}[Command]:${RESET} mono \"$TERRARIA_SERVER_DIR/$TERRARIA_SERVER\" ${FINAL_ARGS[*]}"
     
-    tmux new-session -d -s "$SESSION" \
-         "mono --server --gc=sgen -O=all ./\"$TERRARIA_SERVER_DIR/$TERRARIA_SERVER\" ${FINAL_ARGS[*]}"
+    tmux new-session -d -s "$SESSION_TS" \
+        "mono --server --gc=sgen -O=all \"$TERRARIA_SERVER_DIR/$TERRARIA_SERVER\" ${FINAL_ARGS[*]}"
 }
 
 
@@ -267,6 +273,7 @@ if [[ -z "$SESSION" ]]; then
     exit 1
 fi
 
+SESSION_TS="${SESSION}-ts"
 launch
 
 

@@ -12,8 +12,8 @@
 
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/setup.sh"
-source "$SCRIPT_DIR/common.sh"
+source "$SCRIPT_DIR/utils/setup.sh"
+source "$SCRIPT_DIR/utils/common.sh"
 source "$TMANAGER_CONFIG/terraria-manager.cfg"
 
 
@@ -119,12 +119,12 @@ function parse_args {
 function run_command {
     if [[ "$BACKUP_SERVER" == true ]]; then
         echo -e "${GREEN}[TManager Backup]:${RESET} Backing up server..."
-        "$TMANAGER_LIB/backup-server.sh"
+        "$TMANAGER_LIB/backup_helpers/server_bak.sh"
     fi
 
     if [[ -n "$BACKUP_WORLD" ]]; then
         echo -e "${GREEN}[TManager Backup]:${RESET} Backing up world..."
-        "$TMANAGER_LIB/backup-world.sh" "$BACKUP_WORLD"
+        "$TMANAGER_LIB/backup_helpers/world_bak.sh" "$BACKUP_WORLD"
     fi
 
     if [[ -n "$BACKUP_CONFIG" ]]; then

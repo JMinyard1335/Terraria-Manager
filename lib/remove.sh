@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-source "$SCRIPT_DIR/common.sh"
-source "$SCRIPT_DIR/setup.sh"
-source "$TMANAGER_CONFIG/terraria-manager.cfg"
 
 ## Remove
 ## Written By: Jachin Minyard
@@ -13,6 +8,14 @@ source "$TMANAGER_CONFIG/terraria-manager.cfg"
 ## Remove is used to remove the TManager tool from the users files system.
 ## This is a removal of the management tool not the servers or things such as world files,
 ## Server configs etc...
+
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/utils/setup.sh"
+source "$SCRIPT_DIR/utils/common.sh"
+source "$TMANAGER_CONFIG/terraria-manager.cfg"
+
+
 
 function print_usage {
     help_title "TManager remove" "Uninstall Terraria Manager"

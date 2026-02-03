@@ -4,8 +4,8 @@
 ## Written By: Jachin Minyard
 
 source "$HOME/.config/terraria-manager/terraria-manager.cfg"
-source "$HOME/.config/terraria-manager/terraria-manager.env"
-source "$TMANAGER_LIB/common.sh"
+source "$HOME/.local/share/terraria-manager/lib/utils/common.sh"
+source "$HOME/.local/share/terraria-manager/lib/utils/setup.sh"
 
 ###############################################################################
 # Help
@@ -32,10 +32,11 @@ print_usage() {
     help_option "upgrade" "" "updates the tools to the latest versions.(Not Implemented)"
     echo
     help_section "Session Management"
+    help_option "new" "" "launches the server with no params or session."
     help_option "launch"    "" "Start a Terraria server session"
     help_option "stop"      "" "Stop a running server session(Not Implemented)"
-    help_option "view"      "" "View a running server session (tmux) (Not Implemeneted)"
-    help_option "new" "" "launches the server with no params or session."
+    help_option "show"      "" "open a running server session (tmux)"
+    help_option "hide" "" "close the currently opened server session (tmux)"
     echo
 
     help_section "Global Options"
@@ -95,11 +96,14 @@ case "$cmd" in
     stop)
         exec "$TMANAGER_LIB/stop.sh" "$@"
         ;;
-    view)
-        exec "$TMANAGER_LIB/view.sh" "$@"
+    show)
+        exec "$TMANAGER_LIB/show.sh" "$@"
         ;;
     new)
 	exec "$TMANAGER_LIB/new.sh" "$@"
+	;;
+    hide)
+	exec "$TMANAGER_LIB/hide.sh" "$@"
 	;;
     backup)
         exec "$TMANAGER_LIB/backup.sh" "$@"

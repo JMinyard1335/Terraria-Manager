@@ -106,3 +106,5 @@ function help_option {
 function help_note {
     echo -e "  ${HIGHLIGHT_COLOR}• $*${RESET}"
 }
+
+

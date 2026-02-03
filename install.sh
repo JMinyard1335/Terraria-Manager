@@ -4,8 +4,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$SCRIPT_DIR/configs/terraria-manager.cfg"
-source "$SCRIPT_DIR/lib/common.sh"
-source "$SCRIPT_DIR/lib/setup.sh"
+source "$SCRIPT_DIR/lib/utils/common.sh"
+source "$SCRIPT_DIR/lib/utils/setup.sh"
 
 ## Install Script:
 ## Written By: Jachin Minyard
@@ -48,7 +48,7 @@ function install_lib {
     echo "[TManager Install]: Setting up the library files..."
     mkdir -p "$TMANAGER_LIB"
     shopt -s nullglob
-    cp "$SCRIPT_DIR/lib/"* "$TMANAGER_LIB"
+    cp -r "$SCRIPT_DIR/lib/"* "$TMANAGER_LIB"
     shopt -u nullglob
     chmod +x "$TMANAGER_LIB"/*
 }
